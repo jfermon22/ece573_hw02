@@ -13,6 +13,7 @@
 		52F96D021C4E062A0073D354 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52F96D011C4E062A0073D354 /* Assets.xcassets */; };
 		52F96D051C4E062A0073D354 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52F96D031C4E062A0073D354 /* LaunchScreen.storyboard */; };
 		52F96D101C4E062A0073D354 /* hw02Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F96D0F1C4E062A0073D354 /* hw02Tests.swift */; };
+		52F96D1B1C508D9C0073D354 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F96D1A1C508D9C0073D354 /* FileDownloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		52F96D0B1C4E062A0073D354 /* hw02Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hw02Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52F96D0F1C4E062A0073D354 /* hw02Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw02Tests.swift; sourceTree = "<group>"; };
 		52F96D111C4E062A0073D354 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		52F96D1A1C508D9C0073D354 /* FileDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				52F96CFA1C4E062A0073D354 /* AppDelegate.swift */,
 				52F96CFC1C4E062A0073D354 /* ViewController.swift */,
 				52F96CFE1C4E062A0073D354 /* Main.storyboard */,
+				52F96D1A1C508D9C0073D354 /* FileDownloader.swift */,
 				52F96D011C4E062A0073D354 /* Assets.xcassets */,
 				52F96D031C4E062A0073D354 /* LaunchScreen.storyboard */,
 				52F96D061C4E062A0073D354 /* Info.plist */,
@@ -199,6 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52F96D1B1C508D9C0073D354 /* FileDownloader.swift in Sources */,
 				52F96CFD1C4E062A0073D354 /* ViewController.swift in Sources */,
 				52F96CFB1C4E062A0073D354 /* AppDelegate.swift in Sources */,
 			);

@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
 //MARK: members
     @IBOutlet var xLabel: UILabel!
@@ -16,6 +17,8 @@ class ViewController: UIViewController {
     @IBOutlet var playbackButton: UIButton!
     @IBOutlet var addressField: UITextField!
     @IBOutlet var loadFileButton: UIButton!
+    
+    var fileDownloader:FileDownloader!
     
     
 //MARK: methods
@@ -31,13 +34,19 @@ class ViewController: UIViewController {
     
     //method to handle load of file from web
     @IBAction func loadFile(sender: UIButton) {
-        
+        fileDownloader = FileDownloader(newUrl: addressField.text!);
+        fileDownloader.beginDownload();
     }
 
     //method to kick off file playback
     @IBAction func beginPlayback(sender: UIButton) {
         
     }
-
+    
+    func updateLabels(xValue:NSNumber, yValue:NSNumber, zValue:NSNumber ) {
+        xLabel.text = "\(xValue)"
+        yLabel.text = "\(yValue)"
+        zLabel.text = "\(zValue)"
+    }
 }
 
