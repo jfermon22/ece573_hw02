@@ -34,6 +34,7 @@ class ViewController: UIViewController {
     
     //method to handle load of file from web
     @IBAction func loadFile(sender: UIButton) {
+        print("attempting to load file " + addressField.text!)
         fileDownloader = FileDownloader(newUrl: addressField.text!);
         fileDownloader.beginDownload();
     }

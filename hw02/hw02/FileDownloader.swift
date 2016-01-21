@@ -40,7 +40,7 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         
         if fileManager.fileExistsAtPath(destinationURLForFile.path!){
             print("file successfully downloaded to" + destinationURLForFile.path! )
-           // showFileWithPath(destinationURLForFile.path!)
+            //showFileWithPath(destinationURLForFile.path!)
             filePath = destinationURLForFile.path;
         }
         else{
@@ -53,12 +53,14 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
                 print("An error occurred while moving file to destination url")
             }
         }
+    
     }
     
     @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64){
-        print("btes written")
+        print("bytes written: \(totalBytesWritten)")
         
     }
+
     
     @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         
