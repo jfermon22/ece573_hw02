@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, FileDownloaderDelegate {
 //MARK: members
     @IBOutlet var xLabel: UILabel!
     @IBOutlet var yLabel: UILabel!
@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet var addressField: UITextField!
     @IBOutlet var loadFileButton: UIButton!
     
-    var fileDownloader:FileDownloader!
+    var fileDownloader:FileDownloader?
     
     
 //MARK: methods
@@ -36,7 +36,8 @@ class ViewController: UIViewController {
     @IBAction func loadFile(sender: UIButton) {
         print("attempting to load file " + addressField.text!)
         fileDownloader = FileDownloader(newUrl: addressField.text!);
-        fileDownloader.beginDownload();
+        fileDownloader!.delegate = self
+        fileDownloader!.beginDownload()
     }
 
     //method to kick off file playback
@@ -49,5 +50,16 @@ class ViewController: UIViewController {
         yLabel.text = "\(yValue)"
         zLabel.text = "\(zValue)"
     }
+    
+    func downloadSuccessful(filepath:String){
+        print("downloadSuccessful:" + filepath)
+        fileDownloader = nil
+    }
+    
+    func downloadFailed(error:NSError){
+         print("downloadFailed:" + error.localizedDescription)
+         fileDownloader = nil
+    }
+    
 }
 

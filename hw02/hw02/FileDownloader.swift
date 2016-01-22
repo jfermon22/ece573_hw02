@@ -8,17 +8,42 @@
 
 import Foundation
 
-
+protocol FileDownloaderDelegate {
+    func downloadSuccessful(filepath:String)
+    func downloadFailed(error:NSError)
+}
 
 class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
     var myUrl:NSURL!
     var session:NSURLSession!
     var sessionDownloadTask:NSURLSessionDownloadTask!
     var filePath:String?
+    var delegate:FileDownloaderDelegate?
     
     init(newUrl:String) {
         super.init()
         myUrl = NSURL(string: newUrl);
+        print("init called")
+        print( self)
+    }
+    
+    deinit {
+        print("deinit called")
+        print( self)
+        let fileManager = NSFileManager()
+        if (filePath != nil && fileManager.fileExistsAtPath(filePath!)){
+            do {
+                try fileManager.removeItemAtPath(self.filePath!)
+                print("file deleted successfully")
+            } catch {
+                print("failed to delete file")
+            }
+        }
+        myUrl = nil
+        session = nil
+        sessionDownloadTask = nil
+        filePath = nil
+        delegate = nil
     }
     
     func beginDownload(){
@@ -32,28 +57,21 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
     }
     
     @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL){
-        print("DOWNLOAD FINISHED")
+        
         let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
         let documentDirectoryPath:String = path[0]
         let fileManager = NSFileManager()
         let destinationURLForFile = NSURL(fileURLWithPath: documentDirectoryPath.stringByAppendingString("/file.txt"))
         
         if fileManager.fileExistsAtPath(destinationURLForFile.path!){
-            print("file successfully downloaded to" + destinationURLForFile.path! )
-            //showFileWithPath(destinationURLForFile.path!)
             filePath = destinationURLForFile.path;
-        }
-        else{
+        } else {
             do {
                 try fileManager.moveItemAtURL(location, toURL: destinationURLForFile)
-                // show file
-                //showFileWithPath(destinationURLForFile.path!)
-                 print("file successfully downloaded after second attempt to" + destinationURLForFile.path! )
-            }catch{
-                print("An error occurred while moving file to destination url")
+            } catch {
+                delegate?.downloadFailed(NSError(domain: "Download success, Error occurred while moving file to destination url",code: 0,userInfo: nil))
             }
         }
-    
     }
     
     @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64){
@@ -63,16 +81,28 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
 
     
     @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
-        
         if(error != nil) {
-            
-            print("Download completed with error: \(error!.localizedDescription)");
+            if (delegate != nil){
+                delegate?.downloadFailed(error!)
+            }
+            //print("Download completed with error: \(error!.localizedDescription)");
             
         } else {
-            
-            print("Download finished successfully");
+            if (delegate != nil){
+                if (filePath != nil){
+                    delegate?.downloadSuccessful(filePath!)
+                }
+                else
+                {
+                    delegate?.downloadFailed(NSError(domain: "Download success, filepath is nil",code: 0,userInfo: nil))
+                }
+            }
+           
             
         }
-        
+        if (self.session != nil){
+            self.session.invalidateAndCancel();
+            self.session = nil 
+        }
     }
 }
