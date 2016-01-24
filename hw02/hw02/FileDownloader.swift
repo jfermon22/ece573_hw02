@@ -19,24 +19,29 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
     var sessionDownloadTask:NSURLSessionDownloadTask!
     var filePath:String?
     var delegate:FileDownloaderDelegate?
+    var fileArray:[String]
     
-    init(newUrl:String) {
+    override init() {
+        self.fileArray = [String]()
         super.init()
-        myUrl = NSURL(string: newUrl);
         print("init called")
-        print( self)
+        print( self )
     }
     
     deinit {
         print("deinit called")
-        print( self)
+        print( self )
         let fileManager = NSFileManager()
-        if (filePath != nil && fileManager.fileExistsAtPath(filePath!)){
-            do {
-                try fileManager.removeItemAtPath(self.filePath!)
-                print("file deleted successfully")
-            } catch {
-                print("failed to delete file")
+        if (filePath != nil) {
+            for path in fileArray {
+                if(fileManager.fileExistsAtPath(path)) {
+                    do {
+                        try fileManager.removeItemAtPath(path)
+                        print(path + " deleted successfully")
+                    } catch {
+                        print(path + " failed to delete file")
+                    }
+                }
             }
         }
         myUrl = nil
@@ -46,47 +51,60 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         delegate = nil
     }
     
+    func setUrl(newUrl:String){
+        myUrl = NSURL(string: newUrl);
+    }
+    
     func beginDownload(){
-        let sessionConfiguration:NSURLSessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.FermonJeff.hw02")
-        
-        sessionConfiguration.HTTPMaximumConnectionsPerHost = 5
+       let sessionConfiguration:NSURLSessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.FermonJeff.hw02")
+        //let sessionConfiguration:NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+
+        sessionConfiguration.HTTPMaximumConnectionsPerHost = 1
         
         self.session = NSURLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
         sessionDownloadTask = self.session.downloadTaskWithURL(myUrl)
         sessionDownloadTask.resume()
     }
     
-    @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL){
+    @objc func URLSession(session: NSURLSession,
+        downloadTask: NSURLSessionDownloadTask,
+        didFinishDownloadingToURL location: NSURL){
         
         let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
         let documentDirectoryPath:String = path[0]
         let fileManager = NSFileManager()
-        let destinationURLForFile = NSURL(fileURLWithPath: documentDirectoryPath.stringByAppendingString("/file.txt"))
-        
-        if fileManager.fileExistsAtPath(destinationURLForFile.path!){
-            filePath = destinationURLForFile.path;
-        } else {
+        let timestamp = NSInteger(NSDate().timeIntervalSince1970)
+        let destinationURLForFile = NSURL(fileURLWithPath: documentDirectoryPath.stringByAppendingString("/file_\(timestamp).txt"))
+        if (!fileManager.fileExistsAtPath(destinationURLForFile.path!)){
             do {
                 try fileManager.moveItemAtURL(location, toURL: destinationURLForFile)
             } catch {
                 delegate?.downloadFailed(NSError(domain: "Download success, Error occurred while moving file to destination url",code: 0,userInfo: nil))
             }
         }
+        
+        if fileManager.fileExistsAtPath(destinationURLForFile.path!){
+            filePath = destinationURLForFile.path;
+            fileArray.append(filePath!)
+            }
     }
     
-    @objc func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64){
+    @objc func URLSession(session: NSURLSession,
+        downloadTask: NSURLSessionDownloadTask,
+        didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64){
         print("bytes written: \(totalBytesWritten)")
         
     }
 
     
-    @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+    @objc func URLSession(session: NSURLSession,
+        task: NSURLSessionTask,
+        didCompleteWithError error: NSError?) {
         if(error != nil) {
             if (delegate != nil){
                 delegate?.downloadFailed(error!)
             }
-            //print("Download completed with error: \(error!.localizedDescription)");
-            
         } else {
             if (delegate != nil){
                 if (filePath != nil){
@@ -97,12 +115,10 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
                     delegate?.downloadFailed(NSError(domain: "Download success, filepath is nil",code: 0,userInfo: nil))
                 }
             }
-           
-            
         }
         if (self.session != nil){
             self.session.invalidateAndCancel();
-            self.session = nil 
+            self.session = nil
         }
     }
 }
