@@ -16,6 +16,9 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     @IBOutlet var zLabel: UILabel!
     @IBOutlet var playbackButton: UIButton!
     @IBOutlet var addressField: UITextField!
+    @IBOutlet var commentView: UILabel!
+    
+    
     var currentFile:String?
     var parser:Hw02FileParser?
     
@@ -39,9 +42,9 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    //override func viewDidDisappear( animated: Bool){
-    //      fileDownloader = nil
-    //}
+    override func viewDidDisappear( animated: Bool){
+          fileDownloader = nil
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -61,22 +64,41 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         if (currentFile != nil){
             //reading
             do {
+                //save text from file to string
                 let text2 = try String(contentsOfFile: currentFile!, encoding: NSASCIIStringEncoding )
+                
+                //update playback button
                 var priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     self.enablePlayback(false,setButtonText: "Playing...")
                 }
+                
+                //parse file
                 parser = Hw02FileParser(newFile: text2)
+                
+                //update comments textbox
+                var fullcomment = ""
+                for comment in (parser!.comments)! {
+                    //append text and separate each line with /n
+                    fullcomment.appendContentsOf(comment + "\n")
+                }
+                fullcomment = fullcomment.stringByReplacingOccurrencesOfString("%", withString: "")
+                
+                //update textview
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    self.updateTextView( fullcomment )
+                }
+                
+                //update values for axis readings
                 priority = DISPATCH_QUEUE_PRIORITY_HIGH
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                    for line in self.parser!.fileContents {
-                        if ( !line.hasPrefix("%") ){
-                            let values = line.componentsSeparatedByString("\t")
-                            self.updateLabels(values[0], yValue: values[1], zValue: values[2])
-                            sleep(1)
-                        }
+                    for accelVal in (self.parser?.data)! {
+                        self.updateLabels(accelVal.x, yValue: accelVal.y, zValue: accelVal.z)
+                        sleep(1)
                     }
-                    self.enablePlayback(false,setButtonText: "Load New File")
+                    
+                //update playback button text
+                self.enablePlayback(false,setButtonText: "Load New File")
                 }
             }
             catch {print(" ")}
@@ -88,7 +110,6 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     
     func updateLabels(xValue:String, yValue:String, zValue:String ) {
         dispatch_async(dispatch_get_main_queue()) {
-            print( "x: " + xValue + " y: " + yValue + " z:" + zValue)
             self.xLabel.text = xValue
             self.yLabel.text = yValue
             self.zLabel.text = zValue
@@ -104,6 +125,12 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     func downloadFailed(error:NSError){
         enablePlayback(false,setButtonText: "Download Failed")
         print("downloadFailed:" + error.localizedDescription)
+    }
+    
+    func updateTextView(comments:String){
+       dispatch_async(dispatch_get_main_queue()) {
+        self.commentView.text = comments
+        }
     }
     
     func enablePlayback(isEnabled:Bool, setButtonText buttonText:String = "")
