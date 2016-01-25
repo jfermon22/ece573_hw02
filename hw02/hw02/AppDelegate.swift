@@ -16,6 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        if let url = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
+            if ( url.isFileReferenceURL() ) {
+                let rootViewController = self.window!.rootViewController as? ViewController
+                rootViewController?.importFile(url)
+            }
+        }
         return true
     }
 

@@ -51,8 +51,12 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         delegate = nil
     }
     
-    func setUrl(newUrl:String){
+    func setUrlWithString(newUrl:String){
         myUrl = NSURL(string: newUrl);
+    }
+    
+    func setUrlWithUrl(newUrl:NSURL){
+        myUrl = newUrl;
     }
     
     func beginDownload(){

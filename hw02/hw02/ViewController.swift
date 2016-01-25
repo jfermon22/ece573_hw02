@@ -54,7 +54,7 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     //method to handle load of file from web
     @IBAction func loadFile(sender: UIButton) {
         print("attempting to load file " + addressField.text!)
-        fileDownloader!.setUrl(addressField.text!)
+        fileDownloader!.setUrlWithString(addressField.text!)
         fileDownloader!.beginDownload()
         enablePlayback(false,setButtonText: "Downloading...")
     }
@@ -149,6 +149,12 @@ class ViewController: UIViewController, FileDownloaderDelegate {
                 self.playbackButton.setTitle(buttonText, forState: controlState)
             }
         }
+    }
+    
+    func importFile(newURL:NSURL){
+        fileDownloader!.setUrlWithUrl(newURL)
+        fileDownloader!.beginDownload()
+        enablePlayback(false,setButtonText: "Downloading...")
     }
 }
 
