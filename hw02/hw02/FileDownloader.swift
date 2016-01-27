@@ -37,7 +37,7 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
                 if(fileManager.fileExistsAtPath(path)) {
                     do {
                         try fileManager.removeItemAtPath(path)
-                        print(path + " deleted successfully")
+                        //print(path + " deleted successfully")
                     } catch {
                         print(path + " failed to delete file")
                     }
@@ -51,11 +51,11 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         delegate = nil
     }
     
-    func setUrlWithString(newUrl:String){
-        myUrl = NSURL(string: newUrl);
-    }
+    //func setUrlWithString(newUrl:String){
+    //    myUrl = NSURL(string: newUrl);
+    //}
     
-    func setUrlWithUrl(newUrl:NSURL){
+    func setUrl(newUrl:NSURL){
         myUrl = newUrl;
     }
     
@@ -97,7 +97,7 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         downloadTask: NSURLSessionDownloadTask,
         didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64){
-        print("bytes written: \(totalBytesWritten)")
+        //print("bytes written: \(totalBytesWritten)")
         
     }
 

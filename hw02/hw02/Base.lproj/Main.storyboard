@@ -33,7 +33,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="743" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter file address" textAlignment="natural" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="cIP-Ih-XOW">
+                                    <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="743" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter file address" textAlignment="natural" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="cIP-Ih-XOW">
                                         <rect key="frame" x="10" y="91" width="540" height="27"/>
                                         <accessibility key="accessibilityConfiguration" hint="enter web address to data file" label="Data File:">
                                             <bool key="isElement" value="YES"/>
@@ -51,10 +51,10 @@
                                         </connections>
                                     </button>
                                     <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ZIs-ev-dS4">
-                                        <rect key="frame" x="0.0" y="192" width="560" height="205"/>
+                                        <rect key="frame" x="0.0" y="182" width="560" height="195"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqE-fK-HA4">
-                                                <rect key="frame" x="0.0" y="0.0" width="560" height="64"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="560" height="54"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -66,7 +66,7 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aJ8-PN-IGb">
-                                                <rect key="frame" x="218" y="84" width="125" height="27"/>
+                                                <rect key="frame" x="218" y="74" width="125" height="27"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="X:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mZs-ON-Arg">
                                                         <rect key="frame" x="0.0" y="0.0" width="21" height="27"/>
@@ -83,7 +83,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IVs-Xy-fdi">
-                                                <rect key="frame" x="218" y="131" width="125" height="27"/>
+                                                <rect key="frame" x="218" y="121" width="125" height="27"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Y:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VEH-aI-wbY">
                                                         <rect key="frame" x="0.0" y="0.0" width="22" height="27"/>
@@ -103,7 +103,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcg-6i-LPG">
-                                                <rect key="frame" x="218" y="178" width="125" height="27"/>
+                                                <rect key="frame" x="218" y="168" width="125" height="27"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Z:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXq-Jf-cu2">
                                                         <rect key="frame" x="0.0" y="0.0" width="21" height="27"/>
@@ -167,11 +167,11 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="cIP-Ih-XOW" firstAttribute="top" secondItem="g5T-nT-ork" secondAttribute="bottom" constant="20" id="0nf-vE-gRd"/>
-                                    <constraint firstItem="ZIs-ev-dS4" firstAttribute="top" secondItem="AIc-RE-Ds3" secondAttribute="bottom" constant="30" id="6UU-Bv-VBO"/>
+                                    <constraint firstItem="ZIs-ev-dS4" firstAttribute="top" secondItem="AIc-RE-Ds3" secondAttribute="bottom" constant="20" id="6UU-Bv-VBO"/>
                                     <constraint firstAttribute="trailing" secondItem="cIP-Ih-XOW" secondAttribute="trailing" constant="10" id="Ivb-Q2-Y3Q"/>
                                     <constraint firstItem="S9w-JZ-n1P" firstAttribute="top" secondItem="Q5S-R5-UZZ" secondAttribute="bottom" constant="15" id="WP8-An-43f"/>
                                     <constraint firstItem="g5T-nT-ork" firstAttribute="top" secondItem="9DL-A4-aYc" secondAttribute="bottom" constant="20" id="Z0h-VZ-4fQ"/>
-                                    <constraint firstItem="S9w-JZ-n1P" firstAttribute="top" secondItem="ZIs-ev-dS4" secondAttribute="bottom" constant="70" id="kqR-e2-Opi"/>
+                                    <constraint firstItem="S9w-JZ-n1P" firstAttribute="top" secondItem="ZIs-ev-dS4" secondAttribute="bottom" constant="90" id="kqR-e2-Opi"/>
                                     <constraint firstItem="AIc-RE-Ds3" firstAttribute="top" secondItem="cIP-Ih-XOW" secondAttribute="bottom" constant="20" id="p3S-UJ-v2r"/>
                                     <constraint firstItem="cIP-Ih-XOW" firstAttribute="leading" secondItem="9hY-cg-EUt" secondAttribute="leading" constant="10" id="vtn-x3-Bxf"/>
                                 </constraints>
