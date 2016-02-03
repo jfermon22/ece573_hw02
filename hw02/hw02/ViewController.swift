@@ -10,13 +10,14 @@ import UIKit
 
 
 class ViewController: UIViewController, FileDownloaderDelegate {
-//MARK: members
+    //MARK: members
     @IBOutlet var xLabel: UILabel!
     @IBOutlet var yLabel: UILabel!
     @IBOutlet var zLabel: UILabel!
     @IBOutlet var playbackButton: UIButton!
     @IBOutlet var addressField: UITextField!
     @IBOutlet var commentView: UILabel!
+    @IBOutlet var tapRecognizer: UITapGestureRecognizer!
     
     var currentFile:String?
     //var parser:Hw02FileParser?
@@ -28,20 +29,20 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         addressField.text = "http://m.uploadedit.com/ba3s/1453598953263.txt"
     }
     @IBAction func file2pressed(sender: UIButton) {
-       addressField.text = "http://m.uploadedit.com/ba3s/145359923777.txt"
+        addressField.text = "http://m.uploadedit.com/ba3s/145359923777.txt"
     }
     
-
-//MARK: methods
+    
+    //MARK: methods
     override func viewDidLoad() {
         super.viewDidLoad()
         enablePlayback(false,setButtonText: "Load File")        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewDidDisappear( animated: Bool){
-          fileDownloader = nil
+        fileDownloader = nil
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -53,14 +54,14 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         importFile(NSURL(string: addressField.text!)!)
         enablePlayback(false,setButtonText: "Downloading...")
     }
-
+    
     //method to kick off file playback
     @IBAction func beginPlayback(sender: UIButton) {
         if (currentFile != nil){
             //reading
             do {
                 //save text from file to string
-                let text2 = try String(contentsOfFile: currentFile!, encoding: NSASCIIStringEncoding )
+                let text2 = try String(contentsOfFile: currentFile!, encoding: NSASCIIStringEncoding)
                 
                 //update playback button
                 var priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
@@ -100,14 +101,14 @@ class ViewController: UIViewController, FileDownloaderDelegate {
                         sleep(1)
                     }
                     
-                //update playback button text
-                self.enablePlayback(false,setButtonText: "Load New File")
-                //perform filedownloader cleanup
-                self.fileDownloader = nil
+                    //update playback button text
+                    self.enablePlayback(false,setButtonText: "Load New File")
+                    //perform filedownloader cleanup
+                    self.fileDownloader = nil
                 }
             }
-            catch {print(" ")}
-           
+            catch {print(error)}
+            
         } else {
             print("current path is nil")
         }
@@ -134,11 +135,11 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         enablePlayback(false,setButtonText: "Download Failed")
         dispatch_async(dispatch_get_main_queue()) {
             //create popup alert to alert user to failed download
-           let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
             //add button
-           alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             //show alert
-           self.presentViewController(alert, animated: true, completion: nil)
+            self.presentViewController(alert, animated: true, completion: nil)
         }
         //print("downloadFailed:" + error.localizedDescription)
     }
@@ -146,7 +147,7 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     //helper method to get main queue and update comment label
     func updateTextView(comments:String){
         //run logic in main queue
-       dispatch_async(dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_main_queue()) {
             //set comment view text
             self.commentView.text = comments
         }
@@ -156,7 +157,7 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     func enablePlayback(isEnabled:Bool, setButtonText buttonText:String = "")
     {
         //run logic in main queue
-       dispatch_async(dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_main_queue()) {
             var controlState:UIControlState
             //Checks if button should be enabled and sets control state to appropriate state
             if (isEnabled){
@@ -176,18 +177,27 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         }
     }
     
+    @IBAction func dismissKeyboard(sender: UITapGestureRecognizer) {
+        addressField.resignFirstResponder()
+    }
+    
     //helper method to begin download of new file
     func importFile(newURL:NSURL){
-        if fileDownloader == nil {
-            fileDownloader = FileDownloader();
-            //sets NSURLSessionDownloadDelegate to this
-            fileDownloader!.delegate = self
-        }
-        //sets url to download from
-        fileDownloader!.setUrl(newURL)
-        fileDownloader!.beginDownload()
-        //Configures playback button to diabled and chanes text
+       // if newURL.fileURL {
+       //     downloadSuccessful(newURL.path!)
+       // } else {
+            if fileDownloader == nil {
+                fileDownloader = FileDownloader();
+                //sets NSURLSessionDownloadDelegate to this
+                fileDownloader!.delegate = self
+            }
+            //sets url to download from
+        fileDownloader!.setUrl(newURL) //Configures playback button to diabled and chanes text
         enablePlayback(false,setButtonText: "Downloading...")
+            fileDownloader!.beginDownload()
+        
+            
+     //   }
     }
 }
 

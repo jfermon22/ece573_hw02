@@ -24,13 +24,13 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
     override init() {
         self.fileArray = [String]()
         super.init()
-        print("init called")
-        print( self )
+        //print("init called")
+        //print( self )
     }
     
     deinit {
-        print("deinit called")
-        print( self )
+        //print("deinit called")
+        //print( self )
         let fileManager = NSFileManager()
         if (filePath != nil) {
             for path in fileArray {
@@ -59,37 +59,53 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         myUrl = newUrl;
     }
     
+    func fileExists(filepath: String) -> Bool {
+        let fileManager = NSFileManager()
+        if (filePath != nil) {
+            return fileManager.fileExistsAtPath(filepath)
+        } else {
+            return false
+        }
+    }
+    
     func beginDownload(){
-       let sessionConfiguration:NSURLSessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.FermonJeff.hw02")
-        //let sessionConfiguration:NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-
-        sessionConfiguration.HTTPMaximumConnectionsPerHost = 1
-        
-        self.session = NSURLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
-        sessionDownloadTask = self.session.downloadTaskWithURL(myUrl)
-        sessionDownloadTask.resume()
+        if myUrl.fileURL {
+            filePath = myUrl.path!
+            fileArray.append(filePath!)
+            if (delegate != nil){
+                    delegate!.downloadSuccessful(filePath!)
+            }
+        } else {
+            let sessionConfiguration:NSURLSessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.FermonJeff.hw02")
+            
+            sessionConfiguration.HTTPMaximumConnectionsPerHost = 1
+            
+            self.session = NSURLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
+            sessionDownloadTask = self.session.downloadTaskWithURL(myUrl)
+            sessionDownloadTask.resume()
+        }
     }
     
     @objc func URLSession(session: NSURLSession,
         downloadTask: NSURLSessionDownloadTask,
         didFinishDownloadingToURL location: NSURL){
-        
-        let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        let documentDirectoryPath:String = path[0]
-        let fileManager = NSFileManager()
-        let timestamp = NSInteger(NSDate().timeIntervalSince1970)
-        let destinationURLForFile = NSURL(fileURLWithPath: documentDirectoryPath.stringByAppendingString("/file_\(timestamp).txt"))
-        if (!fileManager.fileExistsAtPath(destinationURLForFile.path!)){
-            do {
-                try fileManager.moveItemAtURL(location, toURL: destinationURLForFile)
-            } catch {
-                delegate?.downloadFailed(NSError(domain: "Download success, Error occurred while moving file to destination url",code: 0,userInfo: nil))
+            
+            let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+            let documentDirectoryPath:String = path[0]
+            let fileManager = NSFileManager()
+            let timestamp = NSInteger(NSDate().timeIntervalSince1970)
+            let destinationURLForFile = NSURL(fileURLWithPath: documentDirectoryPath.stringByAppendingString("/file_\(timestamp).txt"))
+            if (!fileManager.fileExistsAtPath(destinationURLForFile.path!)){
+                do {
+                    try fileManager.moveItemAtURL(location, toURL: destinationURLForFile)
+                } catch {
+                    delegate?.downloadFailed(NSError(domain: "Download success, Error occurred while moving file to destination url",code: 0,userInfo: nil))
+                }
             }
-        }
-        
-        if fileManager.fileExistsAtPath(destinationURLForFile.path!){
-            filePath = destinationURLForFile.path;
-            fileArray.append(filePath!)
+            
+            if fileManager.fileExistsAtPath(destinationURLForFile.path!){
+                filePath = destinationURLForFile.path;
+                fileArray.append(filePath!)
             }
     }
     
@@ -97,32 +113,32 @@ class FileDownloader:NSObject, NSURLSessionDownloadDelegate {
         downloadTask: NSURLSessionDownloadTask,
         didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64){
-        //print("bytes written: \(totalBytesWritten)")
-        
+            //print("bytes written: \(totalBytesWritten)")
+            
     }
-
+    
     
     @objc func URLSession(session: NSURLSession,
         task: NSURLSessionTask,
         didCompleteWithError error: NSError?) {
-        if(error != nil) {
-            if (delegate != nil){
-                delegate?.downloadFailed(error!)
-            }
-        } else {
-            if (delegate != nil){
-                if (filePath != nil){
-                    delegate?.downloadSuccessful(filePath!)
+            if(error != nil) {
+                if (delegate != nil){
+                    delegate?.downloadFailed(error!)
                 }
-                else
-                {
-                    delegate?.downloadFailed(NSError(domain: "Download success, filepath is nil",code: 0,userInfo: nil))
+            } else {
+                if (delegate != nil){
+                    if (filePath != nil){
+                        delegate?.downloadSuccessful(filePath!)
+                    }
+                    else
+                    {
+                        delegate?.downloadFailed(NSError(domain: "Download success, filepath is nil",code: 0,userInfo: nil))
+                    }
                 }
             }
-        }
-        if (self.session != nil){
-            self.session.invalidateAndCancel();
-            self.session = nil
-        }
+            if (self.session != nil){
+                self.session.invalidateAndCancel();
+                self.session = nil
+            }
     }
 }

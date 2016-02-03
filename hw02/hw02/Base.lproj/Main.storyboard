@@ -33,7 +33,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="743" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter file address" textAlignment="natural" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="cIP-Ih-XOW">
+                                    <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="743" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter file address" textAlignment="natural" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="cIP-Ih-XOW">
                                         <rect key="frame" x="10" y="91" width="540" height="27"/>
                                         <accessibility key="accessibilityConfiguration" hint="enter web address to data file" label="Data File:">
                                             <bool key="isElement" value="YES"/>
@@ -178,23 +178,33 @@
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="9hY-cg-EUt" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="AbC-xZ-Us9"/>
                             <constraint firstItem="Cgb-01-Z2e" firstAttribute="top" secondItem="9hY-cg-EUt" secondAttribute="bottom" constant="50" id="Qg1-ea-9E3"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9hY-cg-EUt" secondAttribute="trailing" id="bAF-Ni-VpC"/>
                             <constraint firstItem="9hY-cg-EUt" firstAttribute="top" secondItem="TTe-Py-Z3q" secondAttribute="bottom" constant="10" id="qcn-2r-GS4"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="yqB-AK-qzR" appends="YES" id="rQ5-7Y-i5x"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="addressField" destination="cIP-Ih-XOW" id="unn-Ia-952"/>
                         <outlet property="commentView" destination="nqE-fK-HA4" id="hid-oN-Y6e"/>
                         <outlet property="playbackButton" destination="S9w-JZ-n1P" id="FmE-BR-NQw"/>
+                        <outlet property="tapRecognizer" destination="yqB-AK-qzR" id="rhD-Yf-2lm"/>
                         <outlet property="xLabel" destination="Lxb-tH-wyX" id="oYh-mX-ss2"/>
                         <outlet property="yLabel" destination="f58-eb-hQF" id="5Yh-5S-lYz"/>
                         <outlet property="zLabel" destination="wAJ-kS-Vtw" id="xdn-Ii-ndJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="yqB-AK-qzR">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="BYZ-38-t0r" id="gsg-bB-qmT"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="566" y="518"/>
         </scene>
