@@ -16,8 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        //print("[ DEBUG ] inside of didfinishlaucnhingwithoptions")
+        
+        //If app is opened from an outsidde app (as when app is opened from mail cliet)
+        // this function is called.
+        
+        //if there is a URL saved in UIApplicationLaunchOptionsURLKey of laucnh options, then open it
         if let url = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
+            
+            //if it is a filereferenceURL then get our ViewController class and import the file using
+            // the importFile method.
             if ( url.isFileReferenceURL() ) {
                 let rootViewController = self.window!.rootViewController as? ViewController
                 rootViewController?.importFile(url)
@@ -28,6 +35,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         //print("[ DEBUG ] inside of sourceApplication - URL:\(url),  sourceAppl:\(sourceApplication)")
+        
+        //If app is opened from an outsidde app (as when app is opened from mail cliet)
+        // this function is called.
+        //import the file using the import file method
                 let rootViewController = self.window!.rootViewController as? ViewController
                 rootViewController?.importFile(url)
         return true

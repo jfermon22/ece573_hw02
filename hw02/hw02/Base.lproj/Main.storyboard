@@ -33,13 +33,13 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="743" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter file address" textAlignment="natural" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="cIP-Ih-XOW">
-                                        <rect key="frame" x="10" y="91" width="540" height="27"/>
+                                    <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="743" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter file address" textAlignment="natural" minimumFontSize="2" translatesAutoresizingMaskIntoConstraints="NO" id="cIP-Ih-XOW">
+                                        <rect key="frame" x="0.0" y="91" width="560" height="27"/>
                                         <accessibility key="accessibilityConfiguration" hint="enter web address to data file" label="Data File:">
                                             <bool key="isElement" value="YES"/>
                                         </accessibility>
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="7"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AIc-RE-Ds3">
@@ -133,14 +133,14 @@
                                         </variation>
                                     </stackView>
                                     <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" misplaced="YES" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="Q5S-R5-UZZ">
-                                        <rect key="frame" x="228" y="414" width="105" height="38"/>
+                                        <rect key="frame" x="196" y="414" width="169" height="38"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Shi-Cv-bkG" userLabel="File 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="42" height="38"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                 <state key="normal" title="File1"/>
                                                 <connections>
-                                                    <action selector="file1pressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ts4-LT-Zlu"/>
+                                                    <action selector="fileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MGJ-z3-Yzd"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0Q-Lw-rKU">
@@ -148,7 +148,15 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                 <state key="normal" title="File2"/>
                                                 <connections>
-                                                    <action selector="file2pressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8o8-EP-89d"/>
+                                                    <action selector="fileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Zc-O8-R15"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vKB-PS-Nkf" userLabel="File3">
+                                                <rect key="frame" x="123" y="0.0" width="46" height="38"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                                <state key="normal" title="File3"/>
+                                                <connections>
+                                                    <action selector="fileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AkI-ms-HYE"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -168,12 +176,12 @@
                                 <constraints>
                                     <constraint firstItem="cIP-Ih-XOW" firstAttribute="top" secondItem="g5T-nT-ork" secondAttribute="bottom" constant="20" id="0nf-vE-gRd"/>
                                     <constraint firstItem="ZIs-ev-dS4" firstAttribute="top" secondItem="AIc-RE-Ds3" secondAttribute="bottom" constant="20" id="6UU-Bv-VBO"/>
-                                    <constraint firstAttribute="trailing" secondItem="cIP-Ih-XOW" secondAttribute="trailing" constant="10" id="Ivb-Q2-Y3Q"/>
+                                    <constraint firstAttribute="trailing" secondItem="cIP-Ih-XOW" secondAttribute="trailing" id="Ivb-Q2-Y3Q"/>
                                     <constraint firstItem="S9w-JZ-n1P" firstAttribute="top" secondItem="Q5S-R5-UZZ" secondAttribute="bottom" constant="15" id="WP8-An-43f"/>
                                     <constraint firstItem="g5T-nT-ork" firstAttribute="top" secondItem="9DL-A4-aYc" secondAttribute="bottom" constant="20" id="Z0h-VZ-4fQ"/>
                                     <constraint firstItem="S9w-JZ-n1P" firstAttribute="top" secondItem="ZIs-ev-dS4" secondAttribute="bottom" constant="90" id="kqR-e2-Opi"/>
                                     <constraint firstItem="AIc-RE-Ds3" firstAttribute="top" secondItem="cIP-Ih-XOW" secondAttribute="bottom" constant="20" id="p3S-UJ-v2r"/>
-                                    <constraint firstItem="cIP-Ih-XOW" firstAttribute="leading" secondItem="9hY-cg-EUt" secondAttribute="leading" constant="10" id="vtn-x3-Bxf"/>
+                                    <constraint firstItem="cIP-Ih-XOW" firstAttribute="leading" secondItem="9hY-cg-EUt" secondAttribute="leading" id="vtn-x3-Bxf"/>
                                 </constraints>
                             </stackView>
                         </subviews>

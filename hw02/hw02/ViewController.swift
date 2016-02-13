@@ -20,23 +20,31 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     @IBOutlet var tapRecognizer: UITapGestureRecognizer!
     
     var currentFile:String?
-    //var parser:Hw02FileParser?
     var fileDownloader:FileDownloader?
+    var isPlaying:Bool!
     
-    //THIS IS DEBUG CODE
-    //REMOVE AND REMOVE BUTTONS FOR FINAL PRODUCT
-    @IBAction func file1pressed(sender: UIButton) {
-        addressField.text = "http://m.uploadedit.com/ba3s/1453598953263.txt"
+    //function for handling putting file address into address fields
+    @IBAction func fileButtonPressed(sender: UIButton) {
+        //check button name and set to correct file
+        var buttonNum:String!
+        if ( sender.currentTitle!.hasSuffix("1") ) {
+            buttonNum = "1"
+        } else if ( sender.currentTitle!.hasSuffix("2") ) {
+            buttonNum = "2"
+        } else {
+            buttonNum = "3"
+        }
+        
+        addressField.text = "http://www2.engr.arizona.edu/~sprinkjm/work/ece473-573/sampleData0" + buttonNum + "-hw02.txt"
     }
-    @IBAction func file2pressed(sender: UIButton) {
-        addressField.text = "http://m.uploadedit.com/ba3s/145359923777.txt"
-    }
-    
     
     //MARK: methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        enablePlayback(false,setButtonText: "Load File")        // Do any additional setup after loading the view, typically from a nib.
+        isPlaying = false
+        
+        //set lower button to not enable playback and to tell us load a file
+        enablePlayback(false,setButtonText: "Load File")
     }
     
     override func viewDidDisappear( animated: Bool){
@@ -50,13 +58,17 @@ class ViewController: UIViewController, FileDownloaderDelegate {
     
     //method to handle load of file from web
     @IBAction func loadFile(sender: UIButton) {
-        print("attempting to load file " + addressField.text!)
+        //print("attempting to load file " + addressField.text!)
+        
+        //call function to handle file downlloading
         importFile(NSURL(string: addressField.text!)!)
+        //set lower button to not enable playback and to tell user that file is downloading
         enablePlayback(false,setButtonText: "Downloading...")
     }
     
-    //method to kick off file playback
+    //method to kick off file playback once playback button hit
     @IBAction func beginPlayback(sender: UIButton) {
+        //check if we have saved a file to a local path
         if (currentFile != nil){
             //reading
             do {
@@ -64,17 +76,22 @@ class ViewController: UIViewController, FileDownloaderDelegate {
                 let text2 = try String(contentsOfFile: currentFile!, encoding: NSASCIIStringEncoding)
                 
                 //update playback button
+                //dispatch async calls needed to force GUI
+                //updates to happen immediately
                 var priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     self.enablePlayback(false,setButtonText: "Playing...")
+                    self.isPlaying = true;
                 }
                 
-                //parse file
+                //Create object that handles parsing of file.
+                //Once parsed, object contains members for comment lines, data lines,
+                // and a structs called AccelData.
                 let parser = Hw02FileParser(newFile: text2)
                 
-                
                 var fullcomment = ""
-                //create single string from comments
+                
+                //loop to create single string from comments
                 for comment in (parser.comments)! {
                     //append text and separate each line with /n
                     //unless line is last line
@@ -88,7 +105,7 @@ class ViewController: UIViewController, FileDownloaderDelegate {
                 //remove %
                 fullcomment = fullcomment.stringByReplacingOccurrencesOfString("%", withString: "")
                 
-                //update textview
+                //update textview to display comments from loaded file
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     self.updateTextView( fullcomment )
                 }
@@ -96,15 +113,18 @@ class ViewController: UIViewController, FileDownloaderDelegate {
                 //update values for axis readings
                 priority = DISPATCH_QUEUE_PRIORITY_HIGH
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    //loop to play through all accelData values
                     for accelVal in (parser.data)! {
                         self.updateLabels(accelVal.x, yValue: accelVal.y, zValue: accelVal.z)
-                        sleep(1)
+                        usleep(100000)
                     }
                     
-                    //update playback button text
+                    //Once play back complete, update playback button text, and set
+                    //button to diabled
                     self.enablePlayback(false,setButtonText: "Load New File")
                     //perform filedownloader cleanup
                     self.fileDownloader = nil
+                    self.isPlaying = false;
                 }
             }
             catch {print(error)}
@@ -114,7 +134,7 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         }
     }
     
-    //helper method to update axis readings
+    //helper method to update axis readings on GUI
     func updateLabels(xValue:String, yValue:String, zValue:String ) {
         dispatch_async(dispatch_get_main_queue()) {
             self.xLabel.text = xValue
@@ -177,27 +197,24 @@ class ViewController: UIViewController, FileDownloaderDelegate {
         }
     }
     
+    //function to dismaiss keyboard when user clicks off oftext entry field
     @IBAction func dismissKeyboard(sender: UITapGestureRecognizer) {
         addressField.resignFirstResponder()
     }
     
     //helper method to begin download of new file
     func importFile(newURL:NSURL){
-       // if newURL.fileURL {
-       //     downloadSuccessful(newURL.path!)
-       // } else {
-            if fileDownloader == nil {
-                fileDownloader = FileDownloader();
-                //sets NSURLSessionDownloadDelegate to this
-                fileDownloader!.delegate = self
-            }
-            //sets url to download from
-        fileDownloader!.setUrl(newURL) //Configures playback button to diabled and chanes text
+        if fileDownloader == nil {
+            fileDownloader = FileDownloader();
+            //sets NSURLSessionDownloadDelegate to this
+            fileDownloader!.delegate = self
+        }
+        //sets url to download from
+        fileDownloader!.setUrl(newURL)
+        //Configures playback button to disabled and changes text
         enablePlayback(false,setButtonText: "Downloading...")
-            fileDownloader!.beginDownload()
+        fileDownloader!.beginDownload()
         
-            
-     //   }
     }
 }
 
